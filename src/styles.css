@@ -1,0 +1,571 @@
+/* ---------------------------------------------------------------- tokens
+ *
+ * Every colour, space and radius in the app comes from here. Nothing below
+ * this block hard-codes a value. That is the same rule I hold on a real
+ * design system, and it is what makes a restyle a one-file change.
+ */
+
+:root {
+  --bg: #0b0d12;
+  --surface: #12151c;
+  --surface-raised: #181c25;
+  --border: #242a36;
+  --border-strong: #39414f;
+
+  --text: #e9ecf2;
+  --text-muted: #969db0;
+  --text-faint: #6a7285;
+
+  --accent: #6d8cff;
+  --accent-ink: #0b0d12;
+  --accent-soft: rgba(109, 140, 255, 0.14);
+
+  --positive: #4ec98b;
+  --negative: #ff6b6b;
+  --warning: #f0b429;
+
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 32px;
+  --space-7: 48px;
+
+  --radius-sm: 8px;
+  --radius: 14px;
+  --radius-lg: 20px;
+
+  --font: 'Inter', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --mono: ui-monospace, 'SF Mono', 'Cascadia Mono', Menlo, monospace;
+
+  --shadow: 0 18px 48px rgba(0, 0, 0, 0.45);
+}
+
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme='dark']) {
+    --bg: #f5f6f9;
+    --surface: #ffffff;
+    --surface-raised: #ffffff;
+    --border: #e3e6ed;
+    --border-strong: #c2c8d6;
+
+    --text: #14171f;
+    --text-muted: #5c6577;
+    --text-faint: #858da0;
+
+    --accent: #3b5bdb;
+    --accent-ink: #ffffff;
+    --accent-soft: rgba(59, 91, 219, 0.1);
+
+    --shadow: 0 18px 44px rgba(20, 23, 31, 0.12);
+  }
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font);
+  font-size: 15px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Motion is decoration on top of a working interface, never the mechanism.
+ * Everything still functions with this on. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ----------------------------------------------------------------- shell */
+
+.app {
+  min-height: 100%;
+  display: grid;
+  grid-template-rows: 1fr auto;
+  padding: var(--space-5) var(--space-4);
+}
+
+.stage {
+  width: 100%;
+  max-width: 420px;
+  margin: 0 auto;
+  align-self: center;
+}
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+}
+
+.card-body {
+  padding: var(--space-5);
+}
+
+/* ---------------------------------------------------------------- header */
+
+.head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  padding: var(--space-4) var(--space-5);
+  border-bottom: 1px solid var(--border);
+}
+
+.head h1 {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+.head .balance {
+  text-align: right;
+  font-size: 12.5px;
+  color: var(--text-muted);
+}
+
+.head .balance b {
+  display: block;
+  color: var(--text);
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ----------------------------------------------------------------- field */
+
+.field + .field {
+  margin-top: var(--space-5);
+}
+
+.field label {
+  display: block;
+  font-size: 12.5px;
+  font-weight: 500;
+  color: var(--text-muted);
+  margin-bottom: var(--space-2);
+}
+
+.input-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  background: var(--surface-raised);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: var(--space-3) var(--space-4);
+  transition: border-color 140ms ease, box-shadow 140ms ease;
+}
+
+.input-wrap:focus-within {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-soft);
+}
+
+.input-wrap[data-invalid='true'] {
+  border-color: var(--negative);
+}
+
+.input-wrap input {
+  flex: 1;
+  min-width: 0;
+  background: none;
+  border: 0;
+  outline: none;
+  color: var(--text);
+  font: inherit;
+  font-variant-numeric: tabular-nums;
+}
+
+.input-wrap input::placeholder {
+  color: var(--text-faint);
+}
+
+.input-wrap input.mono {
+  font-family: var(--mono);
+  font-size: 13.5px;
+}
+
+.amount-input {
+  font-size: 30px !important;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+
+.symbol {
+  color: var(--text-muted);
+  font-weight: 600;
+  font-size: 15px;
+}
+
+.hint {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-3);
+  margin-top: var(--space-2);
+  font-size: 12.5px;
+  color: var(--text-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.hint .warn {
+  color: var(--negative);
+}
+
+.hint .ok {
+  color: var(--positive);
+}
+
+/* --------------------------------------------------------------- buttons */
+
+button {
+  font: inherit;
+  cursor: pointer;
+}
+
+button:disabled {
+  cursor: not-allowed;
+}
+
+.btn {
+  width: 100%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  padding: var(--space-4);
+  border-radius: var(--radius);
+  border: 1px solid transparent;
+  background: var(--accent);
+  color: var(--accent-ink);
+  font-weight: 600;
+  font-size: 15px;
+  transition: filter 140ms ease, transform 100ms ease, opacity 140ms ease;
+}
+
+.btn:hover:not(:disabled) {
+  filter: brightness(1.08);
+}
+
+.btn:active:not(:disabled) {
+  transform: translateY(1px);
+}
+
+.btn:disabled {
+  opacity: 0.42;
+}
+
+.btn.ghost {
+  background: transparent;
+  border-color: var(--border-strong);
+  color: var(--text);
+}
+
+.btn.quiet {
+  background: transparent;
+  border-color: transparent;
+  color: var(--text-muted);
+  padding: var(--space-2);
+  width: auto;
+  font-size: 13px;
+}
+
+.btn.quiet:hover {
+  color: var(--text);
+}
+
+.pill {
+  border: 1px solid var(--border-strong);
+  background: transparent;
+  color: var(--text-muted);
+  border-radius: 999px;
+  padding: 3px 10px;
+  font-size: 12px;
+  font-weight: 600;
+  transition: background 140ms ease, color 140ms ease, border-color 140ms ease;
+}
+
+.pill:hover {
+  color: var(--text);
+  border-color: var(--text-faint);
+}
+
+.pill[data-on='true'] {
+  background: var(--accent-soft);
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* ---------------------------------------------------------------- review */
+
+.rows {
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+
+.row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-4);
+  padding: var(--space-3) var(--space-4);
+  font-size: 13.5px;
+}
+
+.row + .row {
+  border-top: 1px solid var(--border);
+}
+
+.row dt {
+  color: var(--text-muted);
+  margin: 0;
+}
+
+.row dd {
+  margin: 0;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+}
+
+.row dd .sub {
+  display: block;
+  font-weight: 400;
+  font-size: 12px;
+  color: var(--text-faint);
+}
+
+.row.total {
+  background: var(--surface-raised);
+}
+
+.addr {
+  font-family: var(--mono);
+  font-size: 12.5px;
+}
+
+/* --------------------------------------------------------------- status */
+
+.status {
+  text-align: center;
+  padding: var(--space-6) var(--space-2) var(--space-5);
+}
+
+.status h2 {
+  margin: var(--space-4) 0 var(--space-2);
+  font-size: 18px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+.status p {
+  margin: 0 auto;
+  max-width: 34ch;
+  color: var(--text-muted);
+  font-size: 13.5px;
+}
+
+.dial {
+  width: 76px;
+  height: 76px;
+  margin: 0 auto;
+}
+
+.dial circle {
+  fill: none;
+  stroke-width: 5;
+  stroke-linecap: round;
+}
+
+.dial .track {
+  stroke: var(--border);
+}
+
+.dial .head {
+  stroke: var(--accent);
+  padding: 0;
+  border: 0;
+}
+
+.mark {
+  width: 76px;
+  height: 76px;
+  margin: 0 auto;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+}
+
+.mark svg {
+  width: 34px;
+  height: 34px;
+  fill: none;
+  stroke-width: 2.4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.mark.good {
+  background: rgba(78, 201, 139, 0.12);
+}
+.mark.good svg {
+  stroke: var(--positive);
+}
+
+.mark.bad {
+  background: rgba(255, 107, 107, 0.12);
+}
+.mark.bad svg {
+  stroke: var(--negative);
+}
+
+.txid {
+  margin-top: var(--space-5);
+  padding-top: var(--space-4);
+  border-top: 1px solid var(--border);
+  font-family: var(--mono);
+  font-size: 11px;
+  line-height: 1.6;
+  color: var(--text-faint);
+  word-break: break-all;
+  text-align: left;
+}
+
+.txid span {
+  display: block;
+  font-family: var(--font);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: var(--space-2);
+}
+
+.actions {
+  margin-top: var(--space-5);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.status .note,
+.note {
+  max-width: none;
+  margin-top: var(--space-4);
+  padding: var(--space-3) var(--space-4);
+  background: var(--accent-soft);
+  border-radius: var(--radius-sm);
+  font-size: 12.5px;
+  color: var(--text-muted);
+  text-align: left;
+}
+
+/* --------------------------------------------------------------- devtray
+ *
+ * A visible way to reach every failure state. Shipping the switch rather
+ * than hiding it means the states can be demonstrated rather than described.
+ */
+
+.tray {
+  max-width: 420px;
+  margin: var(--space-5) auto 0;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  font-size: 12px;
+  color: var(--text-faint);
+}
+
+.tray span {
+  margin-right: var(--space-1);
+}
+
+/* --------------------------------------------------------------- spinner */
+
+.spin {
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  border: 2px solid currentColor;
+  border-top-color: transparent;
+  animation: spin 640ms linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.dots {
+  display: inline-flex;
+  gap: 3px;
+  vertical-align: middle;
+}
+
+.dots i {
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: currentColor;
+  animation: blink 1.2s ease-in-out infinite;
+}
+
+.dots i:nth-child(2) {
+  animation-delay: 0.16s;
+}
+.dots i:nth-child(3) {
+  animation-delay: 0.32s;
+}
+
+@keyframes blink {
+  0%,
+  60%,
+  100% {
+    opacity: 0.25;
+  }
+  30% {
+    opacity: 1;
+  }
+}
+
+@media (max-width: 480px) {
+  .app {
+    padding: var(--space-3);
+  }
+  .card-body {
+    padding: var(--space-4);
+  }
+  .amount-input {
+    font-size: 26px !important;
+  }
+}
